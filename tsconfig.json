@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es2022",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "build",
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": [
+    "src/app.ts",
+    "src"
+  ]
+}
