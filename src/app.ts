@@ -5,6 +5,7 @@ import { Calendarific } from "./api/Calendarific";
 import { CalendarificHolidays } from "./models/calendarific/CalendarificHolidays";
 import { Nameday } from "./api/Nameday";
 import { NamedayModel } from "./models/nameday/NamedayModel";
+import { CalendarificCountry } from "./models/calendarific/CalendarificCountry";
 
 const { CALENDARIFIC_API_KEY } = process.env;
 if (CALENDARIFIC_API_KEY == undefined) {
@@ -25,21 +26,33 @@ if (NAMEDAY_TODAY_URL == undefined) {
 const PORT = process.env.PORT ?? 9333;
 
 const app = Express();
+app.use(Express.static("public"));
+app.set("views", "./src/templates");
+app.set("view engine", "ejs");
+
+let countries: CalendarificCountry[] | null = null;
+
 const calendarific = new Calendarific(
   CALENDARIFIC_API_KEY,
   CALENDARIFIC_COUNTRIES_URL,
   CALENDARIFIC_HOLIDAYS_URL);
 const nameday = new Nameday(NAMEDAY_TODAY_URL);
 
-app.get("/", (_, res) => {
-  res.send("Pot Holding");
+
+app.get("/", async (_, res) => {
+  if (!countries) {
+    countries = (await calendarific.fetchCountries()).response.countries
+      .map(country => new CalendarificCountry(country));
+  }
+
+  res.render("home", { countries });
 });
 
 app.get("/v1/country-calendar-info", async (req, res) => {
-  const { countryId } = req.query;
-  if (!countryId || typeof countryId !== "string") {
+  const { country } = req.query;
+  if (!country || typeof country !== "string") {
     let message: string;
-    if (!countryId) {
+    if (!country) {
       message = "Country ID is not defined";
     }
     else {
@@ -52,15 +65,15 @@ app.get("/v1/country-calendar-info", async (req, res) => {
   }
 
   try {
-    const holidaysDto = await calendarific.fetchHolidays(countryId),
-          holidays    = new CalendarificHolidays(countryId, holidaysDto);
+    const holidaysDto = await calendarific.fetchHolidays(country),
+          holidays    = new CalendarificHolidays(country, holidaysDto);
 
-    if (!(await nameday.isCountryIdSupported(countryId))) {
+    if (!(await nameday.isCountryIdSupported(country))) {
       res.send(holidays);
       return;
     }
 
-    const todayNamedayDto = await nameday.fetchTodayNameday(countryId),
+    const todayNamedayDto = await nameday.fetchTodayNameday(country),
           todayNameDay    = new NamedayModel(todayNamedayDto);
 
     res.send({ ...holidays, ...todayNameDay });
