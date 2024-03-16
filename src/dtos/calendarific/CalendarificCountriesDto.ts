@@ -4,11 +4,11 @@ export interface CalendarificCountriesDto {
   meta: CalendarificMetadata;
   response: {
     url:       string;
-    countries: Country[];
+    countries: CalendarificCountryDto[];
   }
 }
 
-interface Country {
+export interface CalendarificCountryDto {
   country_name:        string;
   "iso-3166":          string;
   total_holidays:      number;

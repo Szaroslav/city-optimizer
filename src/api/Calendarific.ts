@@ -1,7 +1,8 @@
 import { FetchService } from "./FetchService";
 
-import { CalendarificHolidaysDto } from "../dtos/calendarific/CalendarificHolidaysDto";
 import { HttpResponseCode } from "../dtos/calendarific/CalendarificMetadata";
+import { CalendarificHolidaysDto } from "../dtos/calendarific/CalendarificHolidaysDto";
+import { CalendarificCountriesDto } from "../dtos/calendarific/CalendarificCountriesDto";
 import { Holiday } from "../models/calendarific/CalendarificHolidays";
 
 export class Calendarific extends FetchService {
@@ -29,6 +30,18 @@ export class Calendarific extends FetchService {
     }
     if (Array.isArray(response.response) && !response.response.length) {
       throw new Error(`Country ID "${countryId}" is invalid`);
+    }
+
+    return response;
+  }
+
+  async fetchCountries(): Promise<CalendarificCountriesDto> {
+    const url = this.COUNTRIES_URL
+      + "?api_key=" + this.API_KEY;
+
+    const response = await this.fetchJson<CalendarificCountriesDto>(url);
+    if (response.meta.code !== HttpResponseCode.Success) {
+      throw new Error("Fetch error: " + response.meta.code);
     }
 
     return response;
