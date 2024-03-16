@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("head", { title: "Home" }) %>
+  </head>
+  <body>
+    <% if (todayNameDay) { %>
+      <div class="name-day-container">
+        <h3>
+          <p class="name-day-heading">
+            Today celebrates:
+          </p>
+          <p class="name-day-whom">
+            <%= todayNameDay.whom %>
+          </p>
+        </h3>
+      </div>
+    <% } %>
+
+    <div class="holidays-container">
+      <div class="holidays-count-container">
+        <div class="total-holidays-count-container">
+          <p class="total-holidays-count-label">
+            This year total holidays count:
+          </p>
+          <p class="total-holidays-count">
+            <%= totalHolidaysCount %>
+          </p>
+        </div>
+
+        <div class="remaining-holidays-count-container">
+          <p class="remaining-holidays-count-label">
+            This year remaining holidays count:
+          </p>
+          <p class="remaining-holidays-count">
+            <%= remainingHolidaysCount %>
+          </p>
+        </div>
+      </div>
+
+      <% if (remainingHolidays.length) { %>
+        <div class="remaining-holidays-container">
+          <div class="next-holiday-container">
+            <h3 class="next-holiday-heading">
+              <%= nextHoliday.name %>
+            </h3>
+            <p class="next-holiday-content">
+              <%= nextHoliday.date.toLocaleDateString() %>
+            </p>
+          </div>
+          <% for (const holiday of remainingHolidays.slice(1)) { %>
+            <div class="holiday-container">
+              <h3 class="holiday-heading">
+                <%= holiday.name %>
+              </h3>
+              <p class="holiday-content">
+                <%= holiday.date.toLocaleDateString() %>
+              </p>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+
+  </body>
+</html>

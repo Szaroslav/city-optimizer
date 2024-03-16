@@ -65,18 +65,25 @@ app.get("/v1/country-calendar-info", async (req, res) => {
   }
 
   try {
-    const holidaysDto = await calendarific.fetchHolidays(country),
-          holidays    = new CalendarificHolidays(country, holidaysDto);
+    const holidaysDto            = await calendarific.fetchHolidays(country),
+          holidays               = new CalendarificHolidays(country, holidaysDto).holidays,
+          holidaysCount          = calendarific.countHolidays(holidays),
+          remainingHolidays      = calendarific.getRemainingHolidaysThisYear(holidays),
+          remainingHolidaysCount = calendarific.countHolidays(remainingHolidays);
 
-    if (!(await nameday.isCountryIdSupported(country))) {
-      res.send(holidays);
-      return;
+    let todayNameDay: NamedayModel | undefined;
+    if (await nameday.isCountryIdSupported(country)) {
+      const todayNamedayDto = await nameday.fetchTodayNameday(country);
+      todayNameDay          = new NamedayModel(todayNamedayDto);
     }
 
-    const todayNamedayDto = await nameday.fetchTodayNameday(country),
-          todayNameDay    = new NamedayModel(todayNamedayDto);
-
-    res.send({ ...holidays, ...todayNameDay });
+    res.render("calendar-info", {
+      totalHolidaysCount: holidaysCount,
+      remainingHolidays,
+      remainingHolidaysCount,
+      nextHoliday: remainingHolidays[0],
+      todayNameDay,
+    });
   }
   catch (error) {
     res.status(400);

@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <%- include("head", { title: "Home" }) %>
-<body>
-  <form action="/v1/country-calendar-info">
-    <select name="country">
-      <% for (const country of countries) { %>
-        <option value="<%= country.id %>"><%= country.flag %> <%= country.name %></option>
-      <% } %>
-    </select>
-    <label for="token">Auth token</label>
-    <input type="text" name="token">
-    <input type="submit">
-  </form>
-</body>
+  <body>
+    <form action="/v1/country-calendar-info">
+      <select name="country" required autocomplete="off">
+        <% for (const country of countries) { %>
+          <option value="<%= country.id %>" <% if (country.id.toLowerCase() === "pl") { %>selected<% } %>>
+            <%= country.flag %> <%= country.name %>
+          </option>
+        <% } %>
+      </select>
+      <label for="token">Auth token</label>
+      <input type="text" name="token">
+      <input type="submit">
+    </form>
+  </body>
 </html>
