@@ -22,7 +22,7 @@ export class CalendarificHolidays {
   }
 }
 
-interface Holiday {
+export interface Holiday {
   name:        string;
   description: string;
   date:        Date;

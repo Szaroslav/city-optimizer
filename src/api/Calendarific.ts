@@ -1,6 +1,8 @@
+import { FetchService } from "./FetchService";
+
 import { CalendarificHolidaysDto } from "../dtos/calendarific/CalendarificHolidaysDto";
 import { HttpResponseCode } from "../dtos/calendarific/CalendarificMetadata";
-import { FetchService } from "./FetchService";
+import { Holiday } from "../models/calendarific/CalendarificHolidays";
 
 export class Calendarific extends FetchService {
   private readonly API_KEY: string;
@@ -30,5 +32,15 @@ export class Calendarific extends FetchService {
     }
 
     return response;
+  }
+
+  countHolidays(holidays: Holiday[]): number {
+    return holidays.length;
+  }
+
+  getRemainingHolidaysThisYear(holidays: Holiday[]): Holiday[] {
+    const now = new Date();
+    const nextHolidays = holidays.filter(h => h.date >= now);
+    return nextHolidays;
   }
 }
