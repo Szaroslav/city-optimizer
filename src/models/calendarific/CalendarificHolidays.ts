@@ -5,14 +5,14 @@ import {
 
 export class CalendarificHolidays {
   public countryId: string;
-  public holidays:  Holiday[];
+  public holidays:  CalendarificHoliday[];
 
   constructor(countryId: string, dto: CalendarificHolidaysDto) {
     this.countryId = countryId;
     this.holidays  = this.getHolidaysFromDto(dto);
   }
 
-  private getHolidaysFromDto(dto: CalendarificHolidaysDto): Holiday[] {
+  private getHolidaysFromDto(dto: CalendarificHolidaysDto): CalendarificHoliday[] {
     return dto.response.holidays.map((holiday => ({
       name: holiday.name,
       description: holiday.description,
@@ -22,7 +22,7 @@ export class CalendarificHolidays {
   }
 }
 
-export interface Holiday {
+export interface CalendarificHoliday {
   name:        string;
   description: string;
   date:        Date;
