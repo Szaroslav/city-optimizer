@@ -1,6 +1,8 @@
 import { FetchService } from "./FetchService";
 
-import { HttpResponseCode } from "../dtos/calendarific/CalendarificMetadata";
+import { HttpStatusCode } from "../HttpStatusCode";
+import { ServerError } from "../ServerError";
+
 import { CalendarificHolidaysDto } from "../dtos/calendarific/CalendarificHolidaysDto";
 import { CalendarificCountriesDto } from "../dtos/calendarific/CalendarificCountriesDto";
 import { CalendarificHoliday } from "../models/calendarific/CalendarificHolidays";
@@ -25,11 +27,12 @@ export class Calendarific extends FetchService {
       + "&year=" + currentYear;
 
     const response = await this.fetchJson<CalendarificHolidaysDto>(url);
-    if (response.meta.code !== HttpResponseCode.Success) {
-      throw new Error("Fetch error: " + response.meta.code);
+    if (response.meta.code !== HttpStatusCode.Success) {
+      throw new ServerError(response.meta.code, "Fetch error");
     }
     if (Array.isArray(response.response) && !response.response.length) {
-      throw new Error(`Country ID "${countryId}" is invalid`);
+      throw new ServerError(
+        HttpStatusCode.UnprocessableContent, `Country ID "${countryId}" is invalid`);
     }
 
     return response;
@@ -40,8 +43,8 @@ export class Calendarific extends FetchService {
       + "?api_key=" + this.API_KEY;
 
     const response = await this.fetchJson<CalendarificCountriesDto>(url);
-    if (response.meta.code !== HttpResponseCode.Success) {
-      throw new Error("Fetch error: " + response.meta.code);
+    if (response.meta.code !== HttpStatusCode.Success) {
+      throw new ServerError(response.meta.code, "Fetch error");
     }
 
     return response;
