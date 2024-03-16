@@ -11,7 +11,6 @@
     "declarationMap": true
   },
   "include": [
-    "src/app.ts",
     "src"
   ]
 }
