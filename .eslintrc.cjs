@@ -28,8 +28,8 @@ module.exports = {
     "@stylistic"
   ],
   rules: {
-    "@stylistic/indent": [ "warn",  2        ],
-    "@stylistic/quotes": [ "warn",  "double" ],
-    "@stylistic/semi":   [ "error", "always" ],
+    "@stylistic/indent": [ "warn",  2,        { VariableDeclarator: "first" } ],
+    "@stylistic/quotes": [ "warn",  "double"                                  ],
+    "@stylistic/semi":   [ "error", "always"                                  ],
   },
 };
