@@ -1,12 +1,5 @@
-export interface CalendarificMetadata {
-  code: HttpResponseCode;
-}
+import { HttpStatusCode } from "../../HttpStatusCode";
 
-export enum HttpResponseCode {
-  Success              = 200,
-  Unauthorized         = 401,
-  UnprocessableContent = 422,
-  InternalError        = 500,
-  TooManyRequests      = 429,
-  Unavailable          = 503,
+export interface CalendarificMetadata {
+  code: HttpStatusCode;
 }

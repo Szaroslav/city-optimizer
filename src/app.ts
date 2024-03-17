@@ -1,4 +1,9 @@
-import Express from "express";
+import { HttpStatusCode } from './HttpStatusCode';
+import Express, {
+  Request,
+  Response,
+  NextFunction
+} from "express";
 import "dotenv/config";
 
 import { Calendarific } from "./api/Calendarific";
@@ -6,6 +11,7 @@ import { CalendarificHolidays } from "./models/calendarific/CalendarificHolidays
 import { Nameday } from "./api/Nameday";
 import { NamedayModel } from "./models/nameday/NamedayModel";
 import { CalendarificCountry } from "./models/calendarific/CalendarificCountry";
+import { ServerError } from "./ServerError";
 
 const { CALENDARIFIC_API_KEY } = process.env;
 if (CALENDARIFIC_API_KEY == undefined) {
@@ -48,7 +54,7 @@ app.get("/", async (_, res) => {
   res.render("home", { countries });
 });
 
-app.get("/v1/country-calendar-info", async (req, res) => {
+app.get("/v1/country-calendar-info", async (req, res, next) => {
   const { country } = req.query;
   if (!country || typeof country !== "string") {
     let message: string;
@@ -59,9 +65,7 @@ app.get("/v1/country-calendar-info", async (req, res) => {
       message = "Country ID is not a string";
     }
 
-    res.status(400);
-    res.send({ message });
-    return;
+    return next(new ServerError(HttpStatusCode.BadRequest, message));
   }
 
   try {
@@ -86,14 +90,31 @@ app.get("/v1/country-calendar-info", async (req, res) => {
     });
   }
   catch (error) {
-    res.status(400);
     if (error instanceof Error) {
-      res.send({ message: error.message });
+      next(error);
     }
     else {
-      res.send({ message: "Something went wrong" });
+      next(new ServerError(HttpStatusCode.InternalError, "Something went wrong"));
     }
   }
+});
+
+app.use((err: Error, _: Request, res: Response, next: NextFunction): void => {
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  let statusCode: HttpStatusCode;
+  if (err instanceof ServerError) {
+    statusCode = err.statusCode;
+  }
+  else {
+    statusCode = HttpStatusCode.InternalError;
+  }
+
+  res
+    .status(statusCode)
+    .render("error", { errorCode: statusCode, error: err.message });
 });
 
 app.listen(PORT, () => {
