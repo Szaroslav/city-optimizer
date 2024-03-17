@@ -6,7 +6,7 @@
       <div class="flex flex-1 flex-col gap-3 p-8">
         <select class="w-100" name="country" required autocomplete="off">
           <% for (const country of countries) { %>
-            <option value="<%= country.id %>" <% if (country.id.toLowerCase() === "pl") { %>selected<% } %>>
+            <option value="<%= country.code %>" <% if (country.code.toLowerCase() === "pl") { %>selected<% } %>>
               <%= country.flag %> <%= country.name %>
             </option>
           <% } %>
@@ -14,7 +14,7 @@
         <div>
           <label for="token" class="block text-sm font-medium leading-6 text-gray-900">Authorization token</label>
           <div class="relative mt-0.5 rounded-md shadow-sm">
-            <input type="text" name="token" id="token" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Very complicated token with some random numbers 333, just kidding">
+            <input type="text" name="token" id="token" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Very complicated token with some random numbers 333, just kidding" autocomplete="off">
           </div>
         </div>
         <div class="pt-4">

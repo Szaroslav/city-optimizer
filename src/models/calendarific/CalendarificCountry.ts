@@ -2,12 +2,12 @@ import { CalendarificCountryDto } from "../../dtos/calendarific/CalendarificCoun
 
 export class CalendarificCountry {
   public name: string;
-  public id:   string;
+  public code: string;
   public flag: string;
 
   constructor(dto: CalendarificCountryDto) {
     this.name = dto.country_name;
-    this.id   = dto["iso-3166"];
+    this.code = dto["iso-3166"];
     this.flag = dto.flag_unicode;
   }
 }
