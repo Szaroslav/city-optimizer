@@ -4,11 +4,11 @@
     <%- include("head", { title: "Error" }) %>
   </head>
   <body>
-    <div class="error-container">
-      <h1 class="error-code">
+    <div class="error-container flex flex-col items-center p-8">
+      <h1 class="error-code block w-28 mb-2 p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-rose-600 dark:border-rose-700 text-3xl font-bold text-white text-center">
         <%= errorCode %>
       </h1>
-      <p class="error-message">
+      <p class="error-message text-lg">
         <%= error %>
       </p>
     </div>

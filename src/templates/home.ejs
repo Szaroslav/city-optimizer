@@ -3,16 +3,24 @@
   <%- include("head", { title: "Home" }) %>
   <body>
     <form action="/v1/country-calendar-info">
-      <select name="country" required autocomplete="off">
-        <% for (const country of countries) { %>
-          <option value="<%= country.id %>" <% if (country.id.toLowerCase() === "pl") { %>selected<% } %>>
-            <%= country.flag %> <%= country.name %>
-          </option>
-        <% } %>
-      </select>
-      <label for="token">Auth token</label>
-      <input type="text" name="token">
-      <input type="submit">
+      <div class="flex flex-1 flex-col gap-3 p-8">
+        <select class="w-100" name="country" required autocomplete="off">
+          <% for (const country of countries) { %>
+            <option value="<%= country.id %>" <% if (country.id.toLowerCase() === "pl") { %>selected<% } %>>
+              <%= country.flag %> <%= country.name %>
+            </option>
+          <% } %>
+        </select>
+        <div>
+          <label for="price" class="block text-sm font-medium leading-6 text-gray-900">Auth token</label>
+          <div class="relative mt-0.5 rounded-md shadow-sm">
+            <input type="text" name="token" id="price" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="thatslife">
+          </div>
+        </div>
+        <div class="pt-4">
+          <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get calendar info</button>
+        </div>
+      </div>
     </form>
   </body>
 </html>
