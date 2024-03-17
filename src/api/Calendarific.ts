@@ -32,7 +32,7 @@ export class Calendarific extends FetchService {
     }
     if (Array.isArray(response.response) && !response.response.length) {
       throw new ServerError(
-        HttpStatusCode.UnprocessableContent, `Country ID "${countryId}" is invalid`);
+        HttpStatusCode.UnprocessableContent, `Country code "${countryId}" is invalid`);
     }
 
     return response;

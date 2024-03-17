@@ -66,10 +66,10 @@ app.get("/v1/country-calendar-info", async (req, res, next) => {
   if (!country || typeof country !== "string") {
     let message: string;
     if (!country) {
-      message = "Country ID is not defined";
+      message = "Country code is not defined";
     }
     else {
-      message = "Country ID is not a string";
+      message = "Country code is not a string";
     }
 
     return next(new ServerError(HttpStatusCode.BadRequest, message));
