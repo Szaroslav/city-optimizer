@@ -13,6 +13,10 @@ import { NamedayModel } from "./models/nameday/NamedayModel";
 import { CalendarificCountry } from "./models/calendarific/CalendarificCountry";
 import { ServerError } from "./ServerError";
 
+const { AUTH_TOKEN } = process.env;
+if (AUTH_TOKEN == undefined) {
+  throw new Error("Auth token is not defined");
+}
 const { CALENDARIFIC_API_KEY } = process.env;
 if (CALENDARIFIC_API_KEY == undefined) {
   throw new Error("Calendarific API key is not defined");
@@ -55,7 +59,10 @@ app.get("/", async (_, res) => {
 });
 
 app.get("/v1/country-calendar-info", async (req, res, next) => {
-  const { country } = req.query;
+  const { country, token } = req.query;
+  if (token !== AUTH_TOKEN) {
+    return next(new ServerError(HttpStatusCode.BadRequest, "Your authorization token is invalid"));
+  }
   if (!country || typeof country !== "string") {
     let message: string;
     if (!country) {
