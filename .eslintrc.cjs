@@ -29,7 +29,7 @@ module.exports = {
   ],
   rules: {
     "@stylistic/indent": [ "warn",  2,        { VariableDeclarator: "first" } ],
-    "@stylistic/quotes": [ "warn",  "double"                                  ],
+    "@stylistic/quotes": [ "warn",  "double", { avoidEscape: true           } ],
     "@stylistic/semi":   [ "error", "always"                                  ],
   },
 };
