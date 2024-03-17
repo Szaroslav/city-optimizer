@@ -2,6 +2,7 @@
 node_modules/
 /build/
 /.env
+/public/styles/main.css
 
 .vscode/*
 !.vscode/settings.json
